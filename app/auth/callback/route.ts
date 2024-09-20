@@ -58,3 +58,5 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.redirect(new URL(next, req.url));
 }
+
+const validNextUrls = ["/", "/home", "/dashboard"]; // Add valid paths here
