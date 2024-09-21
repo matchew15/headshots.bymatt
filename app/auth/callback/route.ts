@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
 
       // Check and create feature-flag row and credits if needed
       const { data: featureFlags, error: featureFlagsError } = await supabase
-        .from('feature_flags')
+        .from('feature_flags') // Ensure 'feature_flags' is a valid table in your Database type
         .select()
         .eq('user_id', user.user.id)
         .single();
