@@ -3,7 +3,6 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Database } from "../../types/supabase";
 import { Login } from "./components/Login";
-import { useEffect } from "react";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +17,9 @@ export default async function LoginPage({
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Check if the user is already authenticated
   if (user) {
+    // Simplified check for 'next' parameter
     const next = Array.isArray(searchParams?.next) ? searchParams.next[0] : searchParams?.next || "/";
     redirect(next); // Redirect to the next URL or default to "/"
   }
