@@ -19,8 +19,13 @@ export default async function LoginPage({
 
   // Check if the user is already authenticated
   if (user) {
-    // Simplified check for 'next' parameter
-    const next = Array.isArray(searchParams?.next) ? searchParams.next[0] : searchParams?.next || "/";
+    // Check if searchParams is defined and handle the 'next' parameter
+    const next = searchParams && searchParams.next 
+      ? Array.isArray(searchParams.next) 
+        ? searchParams.next[0] 
+        : searchParams.next 
+      : "/"; // Default to "/" if searchParams or next is undefined
+
     redirect(next); // Redirect to the next URL or default to "/"
   }
 
