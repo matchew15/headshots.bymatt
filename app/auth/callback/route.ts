@@ -4,7 +4,7 @@ import { isAuthApiError } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-const validNextUrls = ["/", "/home", "/dashboard"]; // Add valid paths here
+const validNextUrls = ["/dashboard"]; // Add valid paths here
 
 export async function GET(req: NextRequest) {
   const requestUrl = new URL(req.url);
@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 
   // Validate the 'next' URL
   if (!validNextUrls.includes(next)) {
-    next = "/"; // Default to home if the next URL is not valid
+    next = "/dashboard"; // Corrected default path
   }
 
   if (error) {
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
 
     } catch (error) {
       console.error("[login] [session] Error:", error);
-      const errorMessage = isAuthApiError(error) ? "Authentication API Error" : "Unknown Error";
+      const errorMessage = isAuthApiError(error) ? error.message : "Unknown Error"; // More specific error message
       return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=${encodeURIComponent(errorMessage)}`);
     }
   }
