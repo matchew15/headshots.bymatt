@@ -68,5 +68,5 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(new URL(next, req.url));
+  return NextResponse.redirect(new URL(next, requestUrl.origin)); // Ensure correct URL construction
 }
