@@ -36,31 +36,6 @@ export async function GET(req: NextRequest) {
         return NextResponse.redirect(`${requestUrl.origin}/auth-error?error=${encodeURIComponent("Failed to get user data")}`);
       }
 
-      // Check and create feature-flag row and credits if needed
-      const { data: featureFlags, error: featureFlagsError } = await supabase
-        .from('feature_flags') // Ensure 'feature_flags' is a valid table in your Database type
-        .select()
-        .eq('user_id', user.user.id)
-        .single();
-
-      if (featureFlagsError && featureFlagsError.code !== 'PGRST116') {
-        console.error("[login] [feature_flags] Error checking feature flags:", featureFlagsError);
-        // Log the error but continue the process
-      }
-
-      if (!featureFlags) {
-        try {
-          const { error: insertFlagError } = await supabase.from('feature_flags').insert({ user_id: user.user.id });
-          if (insertFlagError) throw insertFlagError;
-
-          const { error: insertCreditError } = await supabase.from('credits').insert({ user_id: user.user.id, amount: 0 });
-          if (insertCreditError) throw insertCreditError;
-        } catch (insertError) {
-          console.error("[login] [insert] Error creating user data:", insertError);
-          // Log the error but continue the process
-        }
-      }
-
     } catch (error) {
       console.error("[login] [session] Error:", error);
       const errorMessage = isAuthApiError(error) ? "Authentication API Error" : "Unknown Error";
